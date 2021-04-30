@@ -66,7 +66,7 @@ namespace HomeWork_8
                         }
                     }
                 }
-            }   //Тестовые  данные
+            }   //Тестовые данные
             );
             DeportamentView.ItemsSource = Deportaments;
         }
