@@ -1,0 +1,57 @@
+﻿<Window x:Class="HomeWork_8.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HomeWork_8"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Menu Margin="2">
+                <MenuItem Header="Департамент" Margin="2">
+                    <MenuItem Header="Добавить" Click="MenuItem_Click"/>
+                    <MenuItem Header="Редактировть" Click="EditDeportament_Click"/>
+                    <MenuItem Header="Удалить" Click="DeleteDeportament_Click"/>
+                </MenuItem>
+                <MenuItem Header="Сотрудники" Margin="2">
+                    <MenuItem Header="Добавить" Click="AddStaff_Cilck"/>
+                    <MenuItem Header="Редактировть" Click="EditStaff_Click"/>
+                    <MenuItem Header="Удалить" Click="DeleteStaff_Click" />
+                </MenuItem>
+                <MenuItem Header="Сортировка сотрудников"  Margin="2">
+                    <MenuItem Header="по Имени" Click="SortByName_Click" />
+                    <MenuItem Header="по Фамилии" Click="SortByLastName_Click"/>
+                    <MenuItem Header="по Возрасту" Click="SortByAge_Click"/>
+                    <MenuItem Header="по ID" Click="SortById_Click"/>
+                    <MenuItem Header="по Зарплате" Click="SortBySolary_Click"/>
+                </MenuItem>
+            </Menu>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
+            <Button Content="Загрузить" Margin="2"/>
+            <Button Content="Сохранить" Margin="2"/>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition Width="70*"/>
+            </Grid.ColumnDefinitions>
+
+            <TreeView Grid.Column="0" x:Name="DeportamentView">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Deportaments}">
+                        <TextBlock Text="{Binding Name}"/>
+                    </HierarchicalDataTemplate>                    
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <DataGrid Grid.Column="1" x:Name="StaffsView" DataContext="{Binding SelectedItem, ElementName=DeportamentView, Mode=OneWay}" ItemsSource="{Binding Staffs}">
+                
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>
