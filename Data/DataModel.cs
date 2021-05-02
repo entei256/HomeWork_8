@@ -6,15 +6,16 @@ using System.Windows;
 
 namespace HomeWork_8.Data
 {
+    /// <summary>
+    /// Модель данных для депортаментов
+    /// </summary>
     public class Deportament
     {
         private ObservableCollection<Staff> staffs = new ObservableCollection<Staff>();
 
-        //public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public string Name { get; set; }
         public ObservableCollection<Deportament> Deportaments { get; set; }
-        //public uint CountStaff { get; set; }
         public Deportament Parent { get; set; }
         public ObservableCollection<Staff> Staffs 
         {
@@ -29,6 +30,9 @@ namespace HomeWork_8.Data
         }
     }
 
+    /// <summary>
+    /// Модель данных для сотррудников
+    /// </summary>
     public class Staff
     {
         public string FirstName { get; set; }
@@ -36,6 +40,6 @@ namespace HomeWork_8.Data
         public uint Age { get; set; }
         public Deportament Deportament { get; set; }
         public int Id { get; set; }
-        public uint salary { get; set; }
+        public uint Salary { get; set; }
     }
 }

@@ -33,8 +33,16 @@
             </Menu>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
-            <Button Content="Загрузить" Margin="2"/>
-            <Button Content="Сохранить" Margin="2"/>
+            <Menu Margin="2">
+                <MenuItem Header="Загрузить" Margin="2">
+                    <MenuItem Header="XML" Click="LoadDataBtn_Click"/>
+                    <MenuItem Header="JSON" Click="LoadJSONDataBtn_Click"/>
+                </MenuItem>
+                <MenuItem Header="Сохранить" Margin="2">
+                    <MenuItem Header="XML" Click="SaveDataBtn_Click"/>
+                    <MenuItem Header="JSON" Click="SaveJSONDataBtn_Click"/>
+                </MenuItem>
+            </Menu>
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -42,12 +50,22 @@
                 <ColumnDefinition Width="70*"/>
             </Grid.ColumnDefinitions>
 
-            <TreeView Grid.Column="0" x:Name="DeportamentView">
+            <TreeView Grid.Column="0" x:Name="DeportamentView" ItemsSource="{Binding Path=Deportaments}">
+                <TreeView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Добавить Депортамент" Click="MenuItem_Click"/>
+                        <MenuItem Header="Редоктировать депортамент" Click="EditDeportament_Click"/>
+                    </ContextMenu>
+                </TreeView.ContextMenu>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Deportaments}">
-                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock>
+                            <Run Text="{Binding Name}"/>
+                            <Run Text=" - "/>
+                            <Run Text="{Binding CreatedDate}"/>
+                        </TextBlock>
                     </HierarchicalDataTemplate>                    
-                </TreeView.ItemTemplate>
+                </TreeView.ItemTemplate> 
             </TreeView>
             <DataGrid Grid.Column="1" x:Name="StaffsView" DataContext="{Binding SelectedItem, ElementName=DeportamentView, Mode=OneWay}" ItemsSource="{Binding Staffs}">
                 

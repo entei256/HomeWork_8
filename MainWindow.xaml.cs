@@ -21,7 +21,9 @@ namespace HomeWork_8
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ObservableCollection<Data.Deportament> Deportaments { get; set; }
+        public ObservableCollection<Data.Deportament> Deportaments { get; set; } 
+        public Data.Deportament SelectedDeportament { get; set; }
+        public Data.Staff SelectedStaff { get; set; }
 
         public MainWindow()
         {
@@ -68,7 +70,7 @@ namespace HomeWork_8
                 }
             }   //Тестовые данные
             );
-            DeportamentView.ItemsSource = Deportaments;
+           DeportamentView.ItemsSource = Deportaments;
         }
 
         #region кнопки депортамента
@@ -134,6 +136,38 @@ namespace HomeWork_8
         {
 
         }
-#endregion
+        #endregion
+
+        #region Кнопки загрузки и сохранения
+        private void LoadDataBtn_Click(object sender, RoutedEventArgs e)   //Загрузка XML файла
+        {
+            ObservableCollection<Data.Deportament> LoadedCollection = FileHelper.LoadFile(FileTypeSerialization.Xml);
+
+            foreach(var dep in LoadedCollection)
+            {
+                Deportaments.Add(dep);
+            }
+
+        }
+
+        private void SaveDataBtn_Click(object sender, RoutedEventArgs e)  //Сохранение XML файла
+        {
+            FileHelper.SaveFile(Deportaments, FileTypeSerialization.Xml);
+        }
+
+        private void LoadJSONDataBtn_Click(object sender, RoutedEventArgs e)  //Загррузка JSON файла
+        {
+            ObservableCollection<Data.Deportament> LoadedCollection = FileHelper.LoadFile(FileTypeSerialization.Json);
+            foreach (var dep in LoadedCollection)
+            {
+                Deportaments.Add(dep);
+            }
+        }
+
+        private void SaveJSONDataBtn_Click(object sender, RoutedEventArgs e) //Сохранение JSON файла
+        {
+            FileHelper.SaveFile(Deportaments, FileTypeSerialization.Json);
+        }
+        #endregion
     }
 }
