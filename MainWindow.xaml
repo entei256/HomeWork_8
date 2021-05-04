@@ -55,6 +55,7 @@
                     <ContextMenu>
                         <MenuItem Header="Добавить Депортамент" Click="MenuItem_Click"/>
                         <MenuItem Header="Редоктировать депортамент" Click="EditDeportament_Click"/>
+                        <MenuItem Header="Удалить депортамент" Click="DeleteDeportament_Click"/>
                     </ContextMenu>
                 </TreeView.ContextMenu>
                 <TreeView.ItemTemplate>

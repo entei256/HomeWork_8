@@ -60,7 +60,15 @@ namespace HomeWork_8
                             new Data.Deportament()
                             {
                                 Name = "subNode"
-                            }
+                            },
+                            new Data.Deportament()
+                            {
+                                Name = "subNode2"
+                            },
+                            new Data.Deportament()
+                            {
+                                Name = "subNode3"
+                            },
                         }
                             }
                         }
@@ -88,7 +96,7 @@ namespace HomeWork_8
 
         private void DeleteDeportament_Click(object sender, RoutedEventArgs e)  //Удалить депортамент
         {
-
+            DeletedDeportament(DeportamentView.SelectedItem as Data.Deportament, Deportaments);
         }
         #endregion
 
@@ -114,7 +122,7 @@ namespace HomeWork_8
 #region Кнопки сортировки
         private void SortByName_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void SortByLastName_Click(object sender, RoutedEventArgs e)
@@ -169,5 +177,34 @@ namespace HomeWork_8
             FileHelper.SaveFile(Deportaments, FileTypeSerialization.Json);
         }
         #endregion
+
+        /// <summary>
+        /// Рекурсивный метод удаления депортаментов
+        /// </summary>
+        /// <param name="deportament">Передать депорртамент к удалению</param>
+        /// <param name="targetCollection">передать список на удаление</param>
+        /// <returns>Флаг найден элемент для удаления или нет.</returns>
+        private bool DeletedDeportament(Data.Deportament deportament, ObservableCollection<Data.Deportament> targetCollection)
+        {
+            bool FoundItems = false;  //Фллаг что элемент найден
+            foreach(var dep in targetCollection) //Проходимся по всему переданному списку
+            {
+                if (dep.Equals(DeportamentView.SelectedItem))        //Если елемент удаления найден. Возможен баг: когда два одинаковых елемента в соседних ветках дерева, удаляться оба.
+                {
+                    FoundItems = true;                                  //Меняем флаг на true
+                    targetCollection.Remove(dep);                       //Удаляем найденый элемент
+                    return FoundItems;                                  //Выходим с передачей что элемент найден
+                }
+                else
+                { 
+                    if(dep.Deportaments != null && dep.Deportaments.Count >= 1)       //Если есть дочернии элементы
+                        if(DeletedDeportament(deportament, dep.Deportaments))               //Если рекурсия возвращяет true
+                        { return true; }                                              //Возвращаем выше что элемент найден.
+                }
+            }
+
+
+            return FoundItems;
+        }
     }
 }
