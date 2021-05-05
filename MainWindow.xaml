@@ -54,16 +54,16 @@
                 <TreeView.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Добавить Депортамент" Click="MenuItem_Click"/>
-                        <MenuItem Header="Редоктировать депортамент" Click="EditDeportament_Click"/>
+                        <MenuItem Header="Редактировать депортамент" Click="EditDeportament_Click"/>
                         <MenuItem Header="Удалить депортамент" Click="DeleteDeportament_Click"/>
                     </ContextMenu>
                 </TreeView.ContextMenu>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Deportaments}">
                         <TextBlock>
-                            <Run Text="{Binding Name}"/>
-                            <Run Text=" - "/>
-                            <Run Text="{Binding CreatedDate}"/>
+                            <Run Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Run Text="-"/>
+                            <Run Text="{Binding CreatedDate, BindsDirectlyToSource=True, StringFormat=\{0:d\}}"/>
                         </TextBlock>
                     </HierarchicalDataTemplate>                    
                 </TreeView.ItemTemplate> 

@@ -21,9 +21,7 @@ namespace HomeWork_8
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ObservableCollection<Data.Deportament> Deportaments { get; set; } 
-        public Data.Deportament SelectedDeportament { get; set; }
-        public Data.Staff SelectedStaff { get; set; }
+        public static ObservableCollection<Data.Deportament> Deportaments { get; set; } 
 
         public MainWindow()
         {
@@ -39,11 +37,6 @@ namespace HomeWork_8
                         Name = "subNode",
                         Staffs = new ObservableCollection<Data.Staff>()
                         {
-                            new Data.Staff{LastName  = "kkk",FirstName="kkkkk" },
-                            new Data.Staff{LastName  = "ddd",FirstName="ddddd" },
-                            new Data.Staff{LastName  = "sss",FirstName="sssss" },
-                            new Data.Staff{LastName  = "aaa",FirstName="aaaaa" },
-                            new Data.Staff{LastName  = "zzz",FirstName="zzzzz" }
                         },
                         Deportaments = new ObservableCollection<Data.Deportament>()
                         {
@@ -84,33 +77,52 @@ namespace HomeWork_8
         #region кнопки депортамента
         private void MenuItem_Click(object sender, RoutedEventArgs e)  //Добавить депортамент
         {
-            var DAForm = new DeportamentWindow();
+            Data.Deportament newDeportament = new Data.Deportament();
+            var currDep = DeportamentView.SelectedItem as Data.Deportament;
+            var DAForm = new DeportamentWindow(ref newDeportament);
             DAForm.ShowDialog();
+
+            if (currDep.Deportaments == null)
+                currDep.Deportaments = new ObservableCollection<Data.Deportament>();
+            currDep.Deportaments.Add(newDeportament);
+
         }
 
         private void EditDeportament_Click(object sender, RoutedEventArgs e)  //Редактировать депортамент
         {
-            var DEForm = new DeportamentWindow();
+            Data.Deportament cangedDeportament = DeportamentView.SelectedItem as Data.Deportament;
+            var DEForm = new DeportamentWindow(ref cangedDeportament);
             DEForm.ShowDialog();
+            DeportamentView.Items.Refresh();
         }
 
         private void DeleteDeportament_Click(object sender, RoutedEventArgs e)  //Удалить депортамент
         {
-            DeletedDeportament(DeportamentView.SelectedItem as Data.Deportament, Deportaments);
+            DeportamrntActions(DeportamentView.SelectedItem as Data.Deportament, Deportaments,Action.delete);
         }
         #endregion
 
         #region Кнопки Сотрудников
         private void AddStaff_Cilck(object sender, RoutedEventArgs e)    //Добавить сотрудника
         {
-            var SAForm = new StaffsWindow();
+            Data.Deportament curDeport = DeportamentView.SelectedItem as Data.Deportament;
+            Data.Staff newStaff = new Data.Staff(curDeport);
+            var SAForm = new StaffsWindow(ref curDeport,ref newStaff);
             SAForm.ShowDialog();
+
+            if (curDeport.Staffs == null)
+                curDeport.Staffs = new ObservableCollection<Data.Staff>();
+            curDeport.Staffs.Add(newStaff);
         }
 
         private void EditStaff_Click(object sender, RoutedEventArgs e)  //Редактировать сотрудника
         {
-            var SEForm = new StaffsWindow();
+            Data.Deportament curDeport = DeportamentView.SelectedItem as Data.Deportament;
+            Data.Staff curStaff = StaffsView.SelectedItem as Data.Staff;
+            var SEForm = new StaffsWindow(ref curDeport,ref curStaff);
             SEForm.ShowDialog();
+
+            StaffsView.Items.Refresh();
         }
 
         private void DeleteStaff_Click(object sender, RoutedEventArgs e)  //Удалить сотрудника
@@ -183,28 +195,34 @@ namespace HomeWork_8
         /// </summary>
         /// <param name="deportament">Передать депорртамент к удалению</param>
         /// <param name="targetCollection">передать список на удаление</param>
+        /// <param name="action">Действие</param>
         /// <returns>Флаг найден элемент для удаления или нет.</returns>
-        private bool DeletedDeportament(Data.Deportament deportament, ObservableCollection<Data.Deportament> targetCollection)
+        private bool DeportamrntActions(Data.Deportament deportament, ObservableCollection<Data.Deportament> targetCollection,Action action)
         {
             bool FoundItems = false;  //Фллаг что элемент найден
             foreach(var dep in targetCollection) //Проходимся по всему переданному списку
             {
-                if (dep.Equals(DeportamentView.SelectedItem))        //Если елемент удаления найден. Возможен баг: когда два одинаковых елемента в соседних ветках дерева, удаляться оба.
+                if (dep.Equals(deportament))        //Если елемент удаления найден. Возможен баг: когда два одинаковых елемента в соседних ветках дерева, удаляться оба.
                 {
-                    FoundItems = true;                                  //Меняем флаг на true
+                    FoundItems = true;              //Меняем флаг на true
                     targetCollection.Remove(dep);                       //Удаляем найденый элемент
                     return FoundItems;                                  //Выходим с передачей что элемент найден
                 }
                 else
                 { 
                     if(dep.Deportaments != null && dep.Deportaments.Count >= 1)       //Если есть дочернии элементы
-                        if(DeletedDeportament(deportament, dep.Deportaments))               //Если рекурсия возвращяет true
+                        if(DeportamrntActions(deportament, dep.Deportaments,action))               //Если рекурсия возвращяет true
                         { return true; }                                              //Возвращаем выше что элемент найден.
                 }
             }
 
 
             return FoundItems;
+        }
+
+        enum Action
+        {
+            delete
         }
     }
 }

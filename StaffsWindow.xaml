@@ -22,8 +22,8 @@
                 <Label Content="Фамилия"/>
                 <TextBox x:Name="LastNameForm" Text="" Margin="2"/>
                 
-                <Label Content="Дата рождения"/>
-                <DatePicker Name="BirthDayForm" Margin="2"/>
+                <Label Content="Полных лет"/>
+                <TextBox Name="AgeForm" Margin="2"/>
                 
                 <Label Content="Депортамент"/>
                 <ListBox Name="DeportamentForm" Margin="2"/>

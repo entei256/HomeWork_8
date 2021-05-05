@@ -7,7 +7,7 @@ using System.Windows;
 namespace HomeWork_8.Data
 {
     /// <summary>
-    /// Модель данных для депортаментов
+    /// Структура данных для депортаментов
     /// </summary>
     public class Deportament
     {
@@ -16,7 +16,6 @@ namespace HomeWork_8.Data
         public DateTime CreatedDate { get; set; }
         public string Name { get; set; }
         public ObservableCollection<Deportament> Deportaments { get; set; }
-        public Deportament Parent { get; set; }
         public ObservableCollection<Staff> Staffs 
         {
             get{ return staffs; }
@@ -28,6 +27,12 @@ namespace HomeWork_8.Data
                     staffs = value;
             }
         }
+
+        public Deportament()
+        {
+            this.CreatedDate = DateTime.Now;
+            this.Staffs = new ObservableCollection<Staff>();
+        }
     }
 
     /// <summary>
@@ -35,11 +40,24 @@ namespace HomeWork_8.Data
     /// </summary>
     public class Staff
     {
+        private static uint id = 0;
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public uint Age { get; set; }
+        public int Age { get; set; }
         public Deportament Deportament { get; set; }
-        public int Id { get; set; }
+        public uint Id 
+        { 
+            get
+            { return id; }
+            private set
+            { id = value; } 
+        }
         public uint Salary { get; set; }
+
+        public Staff(Deportament Deportament)
+        {
+            Id++;
+            this.Deportament = Deportament;
+        }
     }
 }
