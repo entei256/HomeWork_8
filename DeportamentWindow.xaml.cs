@@ -18,11 +18,22 @@ namespace HomeWork_8
     /// </summary>
     public partial class DeportamentWindow : Window
     {
-        Data.Deportament deport;
-        public DeportamentWindow(ref Data.Deportament deportament)
+        Data.Deportament deport;      //новый или редактируемый депортамент
+        Data.Deportament curDep;        //Выбранный депотамент
+
+        /// <summary>
+        /// Создание или редактирование депортамента.
+        /// </summary>
+        /// <param name="deportament">Передать выбранный депортамент.</param>
+        /// <param name="CurrentDeportament">Применяется если создается депортамент.</param>
+        public DeportamentWindow(Data.Deportament deportament ,Data.Deportament CurrentDeportament = null)
         {
             InitializeComponent();
-            deport = deportament;
+            
+            deport = deportament ;
+            curDep = CurrentDeportament;
+
+            //Запорлняем форму полями
             DatePicForm.SelectedDate = deport.CreatedDate;
             CountStaffForm.Text = deport.Staffs.Count.ToString();
             NameForm.Text = deport.Name;
@@ -30,8 +41,20 @@ namespace HomeWork_8
 
         private void Button_Click(object sender, RoutedEventArgs e)  //Кнопка Ok
         {
+            
+            //Соханяем данные из UI в обьек депорртамента
             deport.CreatedDate = DatePicForm.SelectedDate.Value;
             deport.Name = NameForm.Text;
+            if (curDep != null)  //Проверяем что был передан выбранный депортамент
+            {
+                if (curDep.Deportaments == null)         //Проверяем инициализирована ли коллекция дочерних депортаментов.
+                    curDep.Deportaments = new ObservableCollection<Data.Deportament>();        //Инициализируем коллекцию дочерних депортаментов.
+                curDep.Deportaments.Add(deport);         //Добовляем новый дочерний депортамент для выбранного депортамента.
+            }
+            else 
+            {
+                MainWindow.Deportaments.Add(deport);
+            }
             this.Close();
         }
 

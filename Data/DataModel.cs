@@ -11,12 +11,12 @@ namespace HomeWork_8.Data
     /// </summary>
     public class Deportament
     {
-        private ObservableCollection<Staff> staffs = new ObservableCollection<Staff>();
+        private ObservableCollection<Staff> staffs = new ObservableCollection<Staff>();          //Пиватное поле для свойства Staffs
 
-        public DateTime CreatedDate { get; set; }
-        public string Name { get; set; }
-        public ObservableCollection<Deportament> Deportaments { get; set; }
-        public ObservableCollection<Staff> Staffs 
+        public DateTime CreatedDate { get; set; }               //Дата создавния депорртамента
+        public string Name { get; set; }                   //Название депортамента
+        public ObservableCollection<Deportament> Deportaments { get; set; }             //Список дочерних депортаментов
+        public ObservableCollection<Staff> Staffs         //Список сотрудников в  депортаменте.
         {
             get{ return staffs; }
             set 
@@ -30,8 +30,7 @@ namespace HomeWork_8.Data
 
         public Deportament()
         {
-            this.CreatedDate = DateTime.Now;
-            this.Staffs = new ObservableCollection<Staff>();
+            this.CreatedDate = DateTime.Now;            //При создании депортамента указываем ему текущую дату.
         }
     }
 
@@ -40,24 +39,19 @@ namespace HomeWork_8.Data
     /// </summary>
     public class Staff
     {
-        private static uint id = 0;
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int Age { get; set; }
-        public Deportament Deportament { get; set; }
-        public uint Id 
-        { 
-            get
-            { return id; }
-            private set
-            { id = value; } 
-        }
-        public uint Salary { get; set; }
+        private static uint _id = 0;                  //Внутрений счетчик ID
+        public string FirstName { get; set; }            //Имя
+        public string LastName { get; set; }          //Фамилия
+        public int Age { get; set; }                 //Возраст
+        public uint Id { get; set; }                //Индентификатор пользователя.
+        public uint Salary { get; set; }           //Зарплата
 
-        public Staff(Deportament Deportament)
+        
+
+        public Staff()
         {
-            Id++;
-            this.Deportament = Deportament;
+            _id++;      //При  каждом создании нового сотрудника  увеличиваем общий счетчик ID
+            Id = _id;           //Присваиваем увеличиный ID  новому пользователю.
         }
     }
 }

@@ -21,172 +21,112 @@ namespace HomeWork_8
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static ObservableCollection<Data.Deportament> Deportaments { get; set; } 
+        public static ObservableCollection<Data.Deportament> Deportaments { get; set; }   //Общая коллекция депортаментов.
 
         public MainWindow()
         {
             Deportaments = new ObservableCollection<Data.Deportament>();
             InitializeComponent();
-            Deportaments.Add(new Data.Deportament()
-            {
-                Name = "Node 1",
-                Deportaments = new ObservableCollection<Data.Deportament>()
-                {
-                    new Data.Deportament()
-                    {
-                        Name = "subNode",
-                        Staffs = new ObservableCollection<Data.Staff>()
-                        {
-                        },
-                        Deportaments = new ObservableCollection<Data.Deportament>()
-                        {
-                            new Data.Deportament()
-                            {
-                                Name = "subNode",
-                                Deportaments = new ObservableCollection<Data.Deportament>()
-                        {
-                            new Data.Deportament()
-                            {
-                                Name = "subNode",
-                                Deportaments = new ObservableCollection<Data.Deportament>()
-                        {
-                            new Data.Deportament()
-                            {
-                                Name = "subNode"
-                            },
-                            new Data.Deportament()
-                            {
-                                Name = "subNode2"
-                            },
-                            new Data.Deportament()
-                            {
-                                Name = "subNode3"
-                            },
-                        }
-                            }
-                        }
-                            }
-                        }
-                    }
-                }
-            }   //Тестовые данные
-            );
-           DeportamentView.ItemsSource = Deportaments;
+
+            DeportamentView.ItemsSource = Deportaments;
         }
 
         #region кнопки депортамента
         private void MenuItem_Click(object sender, RoutedEventArgs e)  //Добавить депортамент
         {
-            Data.Deportament newDeportament = new Data.Deportament();
-            var currDep = DeportamentView.SelectedItem as Data.Deportament;
-            var DAForm = new DeportamentWindow(ref newDeportament);
-            DAForm.ShowDialog();
+            Data.Deportament newDeportament = new Data.Deportament();         //Новый элемент депортамента.
+            var currDep = DeportamentView.SelectedItem as Data.Deportament;      //Текущий депортамент.
+            var DAForm = new DeportamentWindow(newDeportament, currDep);        //Создаем форму добовления депортамента и передаем  выбранный депортамент и новый
+            DAForm.ShowDialog();         //Открываем  форму.
 
-            if (currDep.Deportaments == null)
-                currDep.Deportaments = new ObservableCollection<Data.Deportament>();
-            currDep.Deportaments.Add(newDeportament);
+            DeportamentView.Items.Refresh();
 
         }
 
         private void EditDeportament_Click(object sender, RoutedEventArgs e)  //Редактировать депортамент
         {
-            Data.Deportament cangedDeportament = DeportamentView.SelectedItem as Data.Deportament;
-            var DEForm = new DeportamentWindow(ref cangedDeportament);
+            Data.Deportament cangedDeportament = DeportamentView.SelectedItem as Data.Deportament;        
+            var DEForm = new DeportamentWindow(cangedDeportament);                  //Передаем только какой депортамент изменить.
             DEForm.ShowDialog();
-            DeportamentView.Items.Refresh();
+            DeportamentView.Items.Refresh();                                  //Обновляем древо что быотобразились изменения
         }
 
         private void DeleteDeportament_Click(object sender, RoutedEventArgs e)  //Удалить депортамент
         {
-            DeportamrntActions(DeportamentView.SelectedItem as Data.Deportament, Deportaments,Action.delete);
+            DeportamrntActions(DeportamentView.SelectedItem as Data.Deportament, Deportaments,Action.delete);     //Пкдкдаем в метот рекурсивного поиска что и действие
         }
         #endregion
 
         #region Кнопки Сотрудников
         private void AddStaff_Cilck(object sender, RoutedEventArgs e)    //Добавить сотрудника
         {
+            if (DeportamentView.SelectedItem == null)  //Проверка что выбран депортамент для сотрудника.
+            {
+                MessageBox.Show("Не выбран депортамент.");
+                return;
+            }
             Data.Deportament curDeport = DeportamentView.SelectedItem as Data.Deportament;
-            Data.Staff newStaff = new Data.Staff(curDeport);
-            var SAForm = new StaffsWindow(ref curDeport,ref newStaff);
+            Data.Staff newStaff = null;
+            var SAForm = new StaffsWindow(curDeport,newStaff);  //Создаем форму и передаем сотрудника и 
             SAForm.ShowDialog();
+            
+            StaffsView.Items.Refresh();                 //Обновляем что бы отобразились изменения
 
-            if (curDeport.Staffs == null)
-                curDeport.Staffs = new ObservableCollection<Data.Staff>();
-            curDeport.Staffs.Add(newStaff);
         }
 
         private void EditStaff_Click(object sender, RoutedEventArgs e)  //Редактировать сотрудника
         {
+            if (DeportamentView.SelectedItem == null || StaffsView.SelectedItem == null)       //Проверяем что выбран депортамент и сотрудник
+            {
+                MessageBox.Show("Не выбран депортамент или сотруднник.");
+                return;
+            }
             Data.Deportament curDeport = DeportamentView.SelectedItem as Data.Deportament;
             Data.Staff curStaff = StaffsView.SelectedItem as Data.Staff;
-            var SEForm = new StaffsWindow(ref curDeport,ref curStaff);
+            var SEForm = new StaffsWindow(curDeport,curStaff);            //Открываем форму с передачей выбранных депортамента и сотрудника
             SEForm.ShowDialog();
 
-            StaffsView.Items.Refresh();
+            StaffsView.Items.Refresh();                                 //Обновляем что бы применить изменения
         }
 
         private void DeleteStaff_Click(object sender, RoutedEventArgs e)  //Удалить сотрудника
         {
-
+            var tmpDep = DeportamentView.SelectedItem as Data.Deportament;
+            tmpDep.Staffs.Remove(StaffsView.SelectedItem as Data.Staff);
         }
         #endregion
 
-#region Кнопки сортировки
-        private void SortByName_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void SortByLastName_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SortByAge_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SortById_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SortBySolary_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        #endregion
-
+        
         #region Кнопки загрузки и сохранения
         private void LoadDataBtn_Click(object sender, RoutedEventArgs e)   //Загрузка XML файла
         {
-            ObservableCollection<Data.Deportament> LoadedCollection = FileHelper.LoadFile(FileTypeSerialization.Xml);
-
-            foreach(var dep in LoadedCollection)
+            ObservableCollection<Data.Deportament> LoadedCollection = FileHelper.LoadFile(FileTypeSerialization.Xml); 
+            Deportaments.Clear();
+            foreach(var dep in LoadedCollection)     //Проходимся по всем загрруженным элементам.
             {
-                Deportaments.Add(dep);
+                Deportaments.Add(dep);             //Добовляем в список депортаментов
             }
 
         }
 
         private void SaveDataBtn_Click(object sender, RoutedEventArgs e)  //Сохранение XML файла
         {
-            FileHelper.SaveFile(Deportaments, FileTypeSerialization.Xml);
+            FileHelper.SaveFile(Deportaments, FileTypeSerialization.Xml);     //Выбираем что  и как сохранить в файл
         }
 
         private void LoadJSONDataBtn_Click(object sender, RoutedEventArgs e)  //Загррузка JSON файла
         {
-            ObservableCollection<Data.Deportament> LoadedCollection = FileHelper.LoadFile(FileTypeSerialization.Json);
-            foreach (var dep in LoadedCollection)
+            ObservableCollection<Data.Deportament> LoadedCollection = FileHelper.LoadFile(FileTypeSerialization.Json);     //Сохрааняем загруженные  обьекты во врременный список.
+            Deportaments.Clear();
+            foreach (var dep in LoadedCollection)          //Проходимся по списку обьектов загррруженных из файла.
             {
-                Deportaments.Add(dep);
+                Deportaments.Add(dep);             //Добовляем в общий список.
             }
         }
 
         private void SaveJSONDataBtn_Click(object sender, RoutedEventArgs e) //Сохранение JSON файла
         {
-            FileHelper.SaveFile(Deportaments, FileTypeSerialization.Json);
+            FileHelper.SaveFile(Deportaments, FileTypeSerialization.Json);            //Указывем что и как сохранить в  файл.
         }
         #endregion
 
@@ -220,9 +160,11 @@ namespace HomeWork_8
             return FoundItems;
         }
 
+        //Разрешшенные действия с рекурсивным методом.
         enum Action
         {
             delete
         }
+
     }
 }

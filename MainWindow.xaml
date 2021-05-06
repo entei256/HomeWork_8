@@ -23,13 +23,6 @@
                     <MenuItem Header="Редактировть" Click="EditStaff_Click"/>
                     <MenuItem Header="Удалить" Click="DeleteStaff_Click" />
                 </MenuItem>
-                <MenuItem Header="Сортировка сотрудников"  Margin="2">
-                    <MenuItem Header="по Имени" Click="SortByName_Click" />
-                    <MenuItem Header="по Фамилии" Click="SortByLastName_Click"/>
-                    <MenuItem Header="по Возрасту" Click="SortByAge_Click"/>
-                    <MenuItem Header="по ID" Click="SortById_Click"/>
-                    <MenuItem Header="по Зарплате" Click="SortBySolary_Click"/>
-                </MenuItem>
             </Menu>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
@@ -68,8 +61,23 @@
                     </HierarchicalDataTemplate>                    
                 </TreeView.ItemTemplate> 
             </TreeView>
-            <DataGrid Grid.Column="1" x:Name="StaffsView" DataContext="{Binding SelectedItem, ElementName=DeportamentView, Mode=OneWay}" ItemsSource="{Binding Staffs}">
-                
+            <DataGrid Grid.Column="1" x:Name="StaffsView" DataContext="{Binding SelectedItem, ElementName=DeportamentView, Mode=OneWay}" 
+                      ItemsSource="{Binding Staffs}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Добавить Сотрудника" Click="AddStaff_Cilck"/>
+                        <MenuItem Header="Редактировать Сотрудника" Click="EditStaff_Click"/>
+                        <MenuItem Header="Удалить Сотрудника" Click="DeleteStaff_Click"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}"/>
+                    <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}"/>
+                    <DataGridTextColumn Header="Возраст" Binding="{Binding Age}"/>
+                    <DataGridTextColumn Header="Название депортамента" Binding="{Binding SelectedItem.Name, ElementName=DeportamentView}"/>
+                    <DataGridTextColumn Header="Зарплата" Binding="{Binding Salary}"/>
+                </DataGrid.Columns>
             </DataGrid>
         </Grid>
     </Grid>

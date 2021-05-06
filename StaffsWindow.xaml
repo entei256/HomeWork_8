@@ -5,14 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeWork_8"
         mc:Ignorable="d"
-        Height="450" Width="800" WindowStyle="ToolWindow">
+        Height="450" Width="800" WindowStyle="ToolWindow" DataContext="{Binding staff}">
+    
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <GroupBox Header="Редактирование сотрудника">
-            <StackPanel Visibility="Visible">
+            <StackPanel Visibility="Visible" >
                 <Label Content="ID"/>
                 <TextBox x:Name="IDForm" IsEnabled="False" Margin="2"/>
                 
@@ -23,13 +25,13 @@
                 <TextBox x:Name="LastNameForm" Text="" Margin="2"/>
                 
                 <Label Content="Полных лет"/>
-                <TextBox Name="AgeForm" Margin="2"/>
+                <TextBox Name="AgeForm" Margin="2" Text="0"/>
                 
                 <Label Content="Депортамент"/>
-                <ListBox Name="DeportamentForm" Margin="2"/>
+                <TextBox Name="DeportamentForm" Margin="2"/>
                 
                 <Label Content="Зарплата"/>
-                <TextBox Name="SalaryForm" Text=""  Margin="2"/>
+                <TextBox Name="SalaryForm" Margin="2" Text="0"/>
             </StackPanel>
         </GroupBox>
 
